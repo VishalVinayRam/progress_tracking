@@ -14,11 +14,30 @@ class ViewScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
            ElevatedButton(
-          child: Text("Exercise section"),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  MyHomePage()));
-          },
-           )
+  child: Text("Exercise section"),
+  onPressed: () {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return MyHomePage();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
+  },
+),
         ],
         title: Text('View Exercises'),
       ),
@@ -55,18 +74,22 @@ List<dynamic> reps = snapshot.data![index]['exerciseList'];
   }
 
   Widget _buildFlipCard(String imagePath, List<dynamic> exerciseList,List<dynamic> reps) {
+    String date = '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}';
     return FlipCard(
       front: Card(
         elevation: 5.0,
         child: Column(
           children: [
+                        Text(date),
+
+             SizedBox(height: 8),
             Image.file(
               File(imagePath),
               width: 200,
               height: 150,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 8),
+           
           ],
         ),
       ),

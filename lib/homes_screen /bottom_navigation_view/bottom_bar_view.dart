@@ -1,4 +1,6 @@
 import 'dart:math' as math;
+import 'package:exercise_tracker/screens/Log.dart';
+
 import '../fitness_app_theme.dart';
 import '../models/tabIcon_data.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +146,9 @@ class _BottomBarViewState extends State<BottomBarView>
                           splashColor: Colors.white.withOpacity(0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
-                          onTap: widget.addClick,
+                          onTap: (){
+                            showPopover(context);
+                          },
                           child: Icon(
                             Icons.add,
                             color: FitnessAppTheme.white,
@@ -355,3 +359,117 @@ class TabClipper extends CustomClipper<Path> {
     return redian;
   }
 }
+
+void showPopover(BuildContext context) {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+  final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
+  final RelativeRect position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(button.size.bottomLeft(Offset.fromDirection(10)), ancestor: overlay),
+      button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
+    ),
+    Offset.zero & overlay.size,
+  );
+
+    showMenu(
+ shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0), // Adjust the radius as needed
+      ),      color:   FitnessAppTheme.nearlyDarkBlue,
+      context: context,
+      position: position,
+      items: [
+        PopupMenuItem(
+          textStyle: TextStyle(color: Colors.white),
+          child: Text('Add Exercise'),
+          value: 'exercise',
+        ),
+        PopupMenuItem(
+                    textStyle: TextStyle(color: Colors.white),
+          child: Text('Add Water Level'),
+          value: 'water',
+        ),
+      ],
+    ).then((value) {
+      if (value == 'exercise') {
+        if (value == 'exercise') {
+        // Handle Add Exercise
+// showDialog(
+//   context: context,
+//   builder: (BuildContext context) {
+//     return Dialog(
+//       child: Container(
+//         padding: EdgeInsets.all(16),
+//         child: Column(
+//           children: [
+//             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+//             TextField(
+//               controller: weightController,
+//               keyboardType: TextInputType.number,
+//               decoration: InputDecoration(labelText: 'Enter Weight in KG'),
+//             ),
+//             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+//             TextField(
+//               controller: exerciseController,
+//               decoration: InputDecoration(labelText: 'Enter Exercise'),
+//             ),
+//             TextField(
+//               controller: reps,
+//               keyboardType: TextInputType.number,
+//               decoration: InputDecoration(labelText: 'Enter Number of reps'),
+//             ),
+//             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+//             SizedBox(height: 16),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 ElevatedButton(
+//                   onPressed: () {
+//                     addExercise();
+//                   },
+//                   child: Text('Add Exercise'),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: () {
+//                     print("save button");
+//                     _attachAndSave();
+//                     Navigator.pop(context);
+//                   },
+//                   child: Text('Save'),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: () {
+//                    var image = _pickImage();
+                 
+                    
+//                   },
+//                   child: Text('Take Photo'),
+//                 ),
+//               ],
+//             ),
+//             Expanded(
+//               child: ListView.builder(
+//                 itemCount: exercises.length,
+//                 itemBuilder: (context, index) {
+//                   return ListTile(
+//                     title: Text(exercises[index].name),
+//                     subtitle: Text('Weight: ${exercises[index].weight}'),
+//                   );
+//                 },
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   },
+// );
+Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+
+        }
+      } else if (value == 'water') {
+        // Handle Add Water Level
+        print('Add Water Level');
+      }
+    });
+  }

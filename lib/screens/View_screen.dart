@@ -66,8 +66,9 @@ class ViewScreen extends StatelessWidget {
                 String imagePath = snapshot.data![index]['imagePath'];
                 List<dynamic> exerciseList = snapshot.data![index]['exerciseList'];
 List<dynamic> reps = snapshot.data![index]['exerciseList'];
-
-                return _buildFlipCard(imagePath, exerciseList,reps);
+List<dynamic> date = snapshot.data![index]['date'];
+print(date);
+                return _buildFlipCard(imagePath, exerciseList,reps,date);
               },
             );
           }
@@ -76,14 +77,12 @@ List<dynamic> reps = snapshot.data![index]['exerciseList'];
     );
   }
 
-  Widget _buildFlipCard(String imagePath, List<dynamic> exerciseList,List<dynamic> reps) {
-    String date = '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}';
+  Widget _buildFlipCard(String imagePath, List<dynamic> exerciseList,List<dynamic> reps,List<dynamic>  date) {
     return FlipCard(
       front: Card(
         elevation: 5.0,
         child: Column(
           children: [
-                        Text(date),
 
              SizedBox(height: 8),
             Image.file(
@@ -107,6 +106,7 @@ List<dynamic> reps = snapshot.data![index]['exerciseList'];
               return ListTile(
                 title: Text(exerciseList[index]),
                 subtitle: Text(reps[index].toString())??Text("1"),
+                trailing: Text(date[index]),
               );
             },
           ),

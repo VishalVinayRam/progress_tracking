@@ -26,36 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-       actions: [
-       ElevatedButton(
-  child: const Text("Home section"),
-  onPressed: () {
-    Navigator.of(context).pop(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return ViewScreen();
-        },
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-          var offsetAnimation = animation.drive(tween);
-
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
-  },
-),
-       ],
-        title: Text('Exercise Tracker'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: _image == null
@@ -96,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () {
                       _attachAndSave();
+                      Navigator.pop(context);
                     },
                     child: Text('Save'),
                   ),
@@ -193,7 +165,11 @@ class _MyHomePageState extends State<MyHomePage> {
     final Map<String, dynamic> newData = {
       'imagePath': imagePath,
       'exerciseList': exerciseList,
+        'timestamp': timestamp,
+
     };
+    prefs.setStringList(
+    'storedData', storedData.map((data) => json.encode(data)).toList());
     storedData.add(newData);
 
     // Convert the list of maps to a list of JSON strings and save to SharedPreferences

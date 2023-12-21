@@ -108,37 +108,42 @@ List<dynamic> reps = snapshot.data![index]['exerciseList'];
 
   Widget _buildFlipCard(String imagePath, List<dynamic> exerciseList,List<dynamic> reps) {
     String date = '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}';
-    return FlipCard(
-      front: Card(
-        elevation: 5.0,
-        child: Column(
-          children: [
-                        Text(date),
-
-             SizedBox(height: 8),
-            Image.file(
-              File(imagePath),
-              width: 200,
-              height: 150,
-              fit: BoxFit.cover,
-            ),
-           
-          ],
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0), // Adjust the radius as needed
         ),
-      ),
-      back: Card(
-        elevation: 5.0,
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: exerciseList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(exerciseList[index]),
-                subtitle: Text(reps[index].toString())??Text("1"),
-              );
-            },
+      child: FlipCard(
+        front: Card(
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0), // Adjust the radius as needed
+        ),
+          elevation: 5.0,
+          child: 
+              Image.file(
+                File(imagePath),
+                width: 200,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
+        ),
+        back: Card(
+          elevation: 5.0,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: exerciseList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+              shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0), // Adjust the radius as needed
+        ),  
+                  title: Text(exerciseList[index]),
+                  subtitle: Text(reps[index].toString())??Text("1"),
+                  trailing: Text(date[index]),
+                );
+              },
+            ),
           ),
         ),
       ),

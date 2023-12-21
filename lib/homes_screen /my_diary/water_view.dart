@@ -2,6 +2,7 @@ import 'package:exercise_tracker/homes_screen%20/fitness_app_theme.dart';
 
 import '../ui_view/wave_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class WaterView extends StatefulWidget {
   const WaterView(
@@ -20,9 +21,13 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    double water = 0;
+        double percentage = (water / 3.5) * 100;
+        TextEditingController  lastTime = TextEditingController();
+
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
       builder: (BuildContext context, Widget? child) {
@@ -69,7 +74,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                       padding: const EdgeInsets.only(
                                           left: 4, bottom: 3),
                                       child: Text(
-                                        '2100',
+                                        '${water}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -145,11 +150,26 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                           size: 16,
                                         ),
                                       ),
+                                      InkWell(
+                                        onTap: ()
+                                        {
+                                          showDialog(context: context, builder: ((BuildContext context){
+                                            return StreamBuilder(
+      stream: Stream.periodic(const Duration(seconds: 1)),
+      builder: (context, snapshot) {
+        return Text(DateFormat('MM/dd/yyyy hh:mm:ss').format(DateTime.now()));
+      },
+    );
+                                          }
+                                          ));
+                                        },
+                                        child: Text("Change"),
+                                      ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Last drink 8:26 AM',
+                                          lastTime.text,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily:
@@ -206,48 +226,68 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: FitnessAppTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.nearlyDarkBlue
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.add,
-                                  color: FitnessAppTheme.nearlyDarkBlue,
-                                  size: 24,
+                            InkWell(
+                              onTap: ()
+                              {
+                                print(water);
+                                setState(() {
+                                                                  water=water+100;
+
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: FitnessAppTheme.nearlyWhite,
+                                  shape: BoxShape.circle,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: FitnessAppTheme.nearlyDarkBlue
+                                            .withOpacity(0.4),
+                                        offset: const Offset(4.0, 4.0),
+                                        blurRadius: 8.0),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: FitnessAppTheme.nearlyDarkBlue,
+                                    size: 24,
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(
                               height: 28,
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: FitnessAppTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: FitnessAppTheme.nearlyDarkBlue
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.remove,
-                                  color: FitnessAppTheme.nearlyDarkBlue,
-                                  size: 24,
+                            InkWell(
+                              onTap: (){
+                                                                print(water);
+
+                                setState((){
+                                water-=100;
+
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: FitnessAppTheme.nearlyWhite,
+                                  shape: BoxShape.circle,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: FitnessAppTheme.nearlyDarkBlue
+                                            .withOpacity(0.4),
+                                        offset: const Offset(4.0, 4.0),
+                                        blurRadius: 8.0),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: FitnessAppTheme.nearlyDarkBlue,
+                                    size: 24,
+                                  ),
                                 ),
                               ),
                             ),
@@ -274,7 +314,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                             ],
                           ),
                           child: WaveView(
-                            percentageValue: 60.0,
+                            percentageValue: percentage,
                           ),
                         ),
                       )

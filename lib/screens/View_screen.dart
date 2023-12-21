@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:exercise_tracker/components/Drawer.dart';
 import 'package:exercise_tracker/main.dart';
+import 'package:exercise_tracker/screens/Log.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -11,14 +13,34 @@ class ViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         actions: [
            ElevatedButton(
-          child: Text("Exercise section"),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  MyHomePage()));
-          },
-           )
+  child: Text("Exercise section"),
+  onPressed: () {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return MyHomePage();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
+    );
+  },
+),
         ],
         title: Text('View Exercises'),
       ),
@@ -44,8 +66,9 @@ class ViewScreen extends StatelessWidget {
                 String imagePath = snapshot.data![index]['imagePath'];
                 List<dynamic> exerciseList = snapshot.data![index]['exerciseList'];
 List<dynamic> reps = snapshot.data![index]['exerciseList'];
-
-                return _buildFlipCard(imagePath, exerciseList,reps);
+List<dynamic> date = snapshot.data![index]['date'];
+print(date);
+                return _buildFlipCard(imagePath, exerciseList,reps,date);
               },
             );
           }
@@ -54,19 +77,21 @@ List<dynamic> reps = snapshot.data![index]['exerciseList'];
     );
   }
 
-  Widget _buildFlipCard(String imagePath, List<dynamic> exerciseList,List<dynamic> reps) {
+  Widget _buildFlipCard(String imagePath, List<dynamic> exerciseList,List<dynamic> reps,List<dynamic>  date) {
     return FlipCard(
       front: Card(
         elevation: 5.0,
         child: Column(
           children: [
+
+             SizedBox(height: 8),
             Image.file(
               File(imagePath),
               width: 200,
               height: 150,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 8),
+           
           ],
         ),
       ),
@@ -81,6 +106,7 @@ List<dynamic> reps = snapshot.data![index]['exerciseList'];
               return ListTile(
                 title: Text(exerciseList[index]),
                 subtitle: Text(reps[index].toString())??Text("1"),
+                trailing: Text(date[index]),
               );
             },
           ),

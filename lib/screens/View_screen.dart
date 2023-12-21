@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:exercise_tracker/components/Drawer.dart';
 import 'package:exercise_tracker/main.dart';
+import 'package:exercise_tracker/screens/Log.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -11,6 +13,7 @@ class ViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         actions: [
            ElevatedButton(
